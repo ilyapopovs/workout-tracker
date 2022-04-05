@@ -1,11 +1,10 @@
-import { createStore, StoreEnhancer } from '@reduxjs/toolkit'
-import { rootReducer } from './reducer'
+import { configureStore } from '@reduxjs/toolkit'
+import { isProd } from '../helpers/envHelpers'
+import authReducer from '../features/auth/store/authSlice'
 
-let enhancer: StoreEnhancer | undefined = undefined
-
-if (import.meta.env.ENVIRONMENT !== 'production') {
-  const { composeWithDevTools } = await import('redux-devtools-extension')
-  enhancer = composeWithDevTools()
-}
-
-export const store = createStore(rootReducer, undefined, enhancer)
+export const store = configureStore({
+  devTools: !isProd,
+  reducer: {
+    auth: authReducer,
+  },
+})

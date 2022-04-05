@@ -10,7 +10,6 @@ function App() {
           <Route path="/">root</Route>
           <Route path="*">any</Route>
         </Routes>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
       </main>
     </>
   )
