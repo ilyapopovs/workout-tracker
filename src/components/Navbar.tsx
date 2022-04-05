@@ -12,10 +12,10 @@ export default function Navbar({}: Props) {
   return (
     <header className="bg-at-light-green text-white">
       <nav className="container py-5 px-4 flex flex-col gap-4 items-center sm:flex-row">
-        <div className="flex items-center gap-x-4">
+        <Link to={'/'} className="flex items-center gap-x-4">
           <img className="w-14" src={dumbbellImg} alt="" />
           <h1 className="text-lg">Active Tracker</h1>
-        </div>
+        </Link>
         <ul className="flex flex-1 justify-end gap-x-10">
           <Link to="/">Home</Link>
           {user ? (
