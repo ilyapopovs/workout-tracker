@@ -1,15 +1,28 @@
 import React, { FormEvent, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { set } from '../../../helpers/formHelpers'
+import { useDispatch } from 'react-redux'
+import { supabase } from '../../../supabaseClient'
+import { setUser } from '../store/authSlice'
 
 const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const login = (e: FormEvent) => {
+  const login = async (e: FormEvent) => {
     e.preventDefault()
-    console.log('logging in here', { email, password })
+
+    let { user, error } = await supabase.auth.signIn({ email, password })
+
+    if (error) {
+      setErrorMessage(error.message)
+    } else {
+      dispatch(setUser(user))
+      navigate('/')
+    }
   }
 
   return (

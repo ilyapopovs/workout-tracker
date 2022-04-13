@@ -1,13 +1,22 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import dumbbellImg from '/images/dumbbell-light.png'
 import { setUser } from '../features/auth/store/authSlice'
+import { supabase } from '../supabaseClient'
 type Props = {}
 
 export default function Navbar({}: Props) {
   const user = useSelector((store: any) => store.auth.user)
   const dispatch = useDispatch()
-  const onLogout = () => dispatch(setUser(null))
+  const navigate = useNavigate()
+
+  const logout = async () => {
+    let { error } = await supabase.auth.signOut()
+    if (!error) {
+      dispatch(setUser(null))
+      navigate('/')
+    }
+  }
 
   return (
     <header className="bg-at-light-green text-white">
@@ -19,14 +28,14 @@ export default function Navbar({}: Props) {
         <ul className="flex flex-1 justify-end gap-x-10">
           <Link to="/">Home</Link>
           {user ? (
-            <li onClick={onLogout} className="cursor-pointer">
-              Logout
-            </li>
-          ) : (
             <>
-              <Link to="/login">Login</Link>
               <Link to="/create">Create</Link>
+              <li onClick={logout} className="cursor-pointer">
+                Logout
+              </li>
             </>
+          ) : (
+            <Link to="/login">Login</Link>
           )}
         </ul>
       </nav>

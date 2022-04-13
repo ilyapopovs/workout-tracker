@@ -1,1 +1,1 @@
-export const isProd = import.meta.env.ENVIRONMENT === 'production'
+export const isProd = import.meta.env.PROD

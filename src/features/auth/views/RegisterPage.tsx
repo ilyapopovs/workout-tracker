@@ -1,16 +1,36 @@
 import React, { FormEvent, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { set } from '../../../helpers/formHelpers'
+import { supabase } from '../../../supabaseClient'
+import { setUser } from '../store/authSlice'
+import { useDispatch } from 'react-redux'
 
 const RegisterPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  const register = (e: FormEvent) => {
+  const register = async (e: FormEvent) => {
     e.preventDefault()
-    console.log('registering here', { email, password, confirmPassword })
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Error: passwords don't match!")
+      setTimeout(() => setErrorMessage(''), 5000)
+
+      return
+    }
+
+    let { user, error } = await supabase.auth.signUp({ email, password })
+
+    if (error) {
+      setErrorMessage(error.message)
+    } else {
+      dispatch(setUser(user))
+      navigate('/')
+    }
   }
 
   return (
