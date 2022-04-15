@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import LoginPage from './features/auth/views/LoginPage'
 import RegisterPage from './features/auth/views/RegisterPage'
@@ -6,6 +6,7 @@ import CreatePage from './features/wourkout/views/CreatePage'
 import HomePage from './features/wourkout/views/HomePage'
 import WorkoutPage from './features/wourkout/views/WorkoutPage'
 import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
 const titles = {
   '/': 'Workouts | Workout Tracker',
@@ -31,8 +32,22 @@ function App() {
       <main className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/create" element={<CreatePage />} />
-          <Route path="/workout/:workoutId" element={<WorkoutPage />} />
+          <Route
+            path="/create"
+            element={
+              <RequireAuth>
+                <CreatePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/workout/:workoutId"
+            element={
+              <RequireAuth>
+                <WorkoutPage />
+              </RequireAuth>
+            }
+          />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="*" />
@@ -40,6 +55,17 @@ function App() {
       </main>
     </>
   )
+}
+
+function RequireAuth({ children }: { children: JSX.Element }) {
+  const user = useSelector((state: any) => state.auth.user)
+  const location = useLocation()
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  return children
 }
 
 export default App

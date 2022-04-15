@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { set } from '../../../helpers/formHelpers'
 import { useDispatch } from 'react-redux'
 import { supabase } from '../../../supabaseClient'
@@ -11,6 +11,7 @@ const LoginPage = () => {
   const [errorMessage, setErrorMessage] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const location = useLocation()
 
   const login = async (e: FormEvent) => {
     e.preventDefault()
@@ -21,7 +22,8 @@ const LoginPage = () => {
       setErrorMessage(error.message)
     } else {
       dispatch(setUser(user))
-      navigate('/')
+      const previousUrl = (location as any).state?.from?.pathname || '/' // in case user got redirected to `/login` by `<RequireAuth>`
+      navigate(previousUrl, { replace: true }) // omit the `/login` page from browser history
     }
   }
 
