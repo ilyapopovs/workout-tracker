@@ -43,14 +43,17 @@ const CreatePage = () => {
     setExercises(exercises.filter((e) => e.id !== id))
   const setExerciseField =
     (exercise: Exercise, fieldName: string) =>
-    (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
-      setExercises([
+    (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      let modifiedArray = [
         ...exercises.filter((ex) => ex.id !== exercise.id),
         {
           ...exercise,
           [fieldName]: e.target.value,
         },
-      ])
+      ]
+      modifiedArray.sort((a: Exercise, b: Exercise) => a.id - b.id)
+      setExercises(modifiedArray)
+    }
 
   useEffect(() => {
     setExercises([{ id: Date.now() }])
