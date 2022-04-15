@@ -2,8 +2,9 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react'
 import { set } from '../../../helpers/formHelpers'
 import greenTrashIcon from '/images/trash-light-green.png'
 import { supabase } from '../../../supabaseClient'
-
-type Exercise = any
+import { Exercise } from '../types'
+import { useDispatch } from 'react-redux'
+import { addWorkout } from '../store/workoutSlice'
 
 const CreatePage = () => {
   const [statusMessage, setStatusMessage] = useState('')
@@ -11,29 +12,30 @@ const CreatePage = () => {
   const [workoutName, setWorkoutName] = useState('')
   const [workoutType, setWorkoutType] = useState('')
   const [exercises, setExercises] = useState([] as Exercise[])
+  const dispatch = useDispatch()
 
   const createWorkout = async (e: FormEvent) => {
     e.preventDefault()
 
-    const { error } = await supabase
+    const response = await supabase
       .from('workouts')
-      .insert([
-        { workout_name: workoutName, workout_type: workoutType, exercises },
-      ])
+      .insert([{ workoutName, workoutType, exercises }])
 
-    if (error) {
+    if (response.error) {
       setErrorMessage('Something went wrong!')
-      console.error(error)
+      console.error(response.error)
 
       return
     }
 
+    const responseWorkout = response.body[0]
+
+    dispatch(addWorkout(responseWorkout))
     setStatusMessage('Success: Workout created!')
     setErrorMessage('')
     setWorkoutName('')
     setWorkoutType('')
     setExercises([])
-    console.log('Would create a workout')
   }
 
   const addExercise = () => setExercises([...exercises, { id: Date.now() }])
@@ -160,7 +162,7 @@ const CreatePage = () => {
                         htmlFor="weight"
                         className="mb-1 text-sm text-at-light-green"
                       >
-                        Weight (LB's)
+                        Weight (kg / lb)
                       </label>
                       <input
                         onChange={setExerciseField(exercise, 'weight')}

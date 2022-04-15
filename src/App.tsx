@@ -3,6 +3,7 @@ import Navbar from './components/Navbar'
 import LoginPage from './features/auth/views/LoginPage'
 import RegisterPage from './features/auth/views/RegisterPage'
 import CreatePage from './features/wourkout/views/CreatePage'
+import HomePage from './features/wourkout/views/HomePage'
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       <Navbar />
       <main className="App">
         <Routes>
-          <Route path="/">root</Route>
+          <Route path="/" element={<HomePage />} />
           <Route path="/create" element={<CreatePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
