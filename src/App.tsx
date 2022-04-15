@@ -4,6 +4,7 @@ import LoginPage from './features/auth/views/LoginPage'
 import RegisterPage from './features/auth/views/RegisterPage'
 import CreatePage from './features/wourkout/views/CreatePage'
 import HomePage from './features/wourkout/views/HomePage'
+import WorkoutPage from './features/wourkout/views/WorkoutPage'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/create" element={<CreatePage />} />
+          <Route path="/workout/:workoutId" element={<WorkoutPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="*" />
