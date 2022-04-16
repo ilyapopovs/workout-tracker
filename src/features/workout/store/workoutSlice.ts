@@ -2,7 +2,7 @@ import type { Workout } from '../types'
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  workouts: [] as Workout[], // todo: fetch from BE
+  workouts: [] as Workout[],
 }
 
 const workoutSlice = createSlice({
