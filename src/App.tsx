@@ -1,45 +1,71 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import Navbar from './components/Navbar'
+import LoginPage from './features/auth/views/LoginPage'
+import RegisterPage from './features/auth/views/RegisterPage'
+import CreatePage from './features/wourkout/views/CreatePage'
+import HomePage from './features/wourkout/views/HomePage'
+import WorkoutPage from './features/wourkout/views/WorkoutPage'
+import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+
+const titles = {
+  '/': 'Workouts | Workout Tracker',
+  '/create': 'Add New Workout | Workout Tracker',
+  '/workout': 'Workout Overview | Workout Tracker',
+  '/login': 'Login | Workout Tracker',
+  '/register': 'Create an Account | Workout Tracker',
+  default: 'Unknown page | Workout Tracker',
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const location = useLocation()
+
+  useEffect(() => {
+    const topPath = location.pathname.match(/\/[^/]*/)![0]
+    // @ts-ignore
+    document.title = titles[topPath] ?? titles.default
+  }, [location])
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <>
+      <Navbar />
+      <main className="App">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/create"
+            element={
+              <RequireAuth>
+                <CreatePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/workout/:workoutId"
+            element={
+              <RequireAuth>
+                <WorkoutPage />
+              </RequireAuth>
+            }
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="*" />
+        </Routes>
+      </main>
+    </>
   )
+}
+
+function RequireAuth({ children }: { children: JSX.Element }) {
+  const user = useSelector((state: any) => state.auth.user)
+  const location = useLocation()
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  return children
 }
 
 export default App
