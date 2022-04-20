@@ -2,7 +2,7 @@
 
 Demo app for recording workouts, built with React and Supabase 💪
 
-The goal is to get a taste for writing an app with CRUD support using Supabase as the BE 👨‍💻
+The goal is to get a taste for using Supabase as the BE 👨‍💻
 
 Check it live at [demo3.popovs.dev](https://demo3.popovs.dev) 🚀
 
