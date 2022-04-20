@@ -9,12 +9,12 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 
 const titles = {
-  '/': 'Workouts | Workout Tracker',
-  '/create': 'Add New Workout | Workout Tracker',
-  '/workout': 'Workout Overview | Workout Tracker',
-  '/login': 'Login | Workout Tracker',
-  '/register': 'Create an Account | Workout Tracker',
-  default: 'Unknown page | Workout Tracker',
+  '/': 'Workouts | Active Tracker',
+  '/create': 'Add New Workout | Active Tracker',
+  '/workout': 'Workout Overview | Active Tracker',
+  '/login': 'Login | Active Tracker',
+  '/register': 'Create an Account | Active Tracker',
+  default: 'Unknown page | Active Tracker',
 }
 
 function App() {
