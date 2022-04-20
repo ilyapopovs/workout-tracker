@@ -14,7 +14,7 @@ type CardioExercise = {
   pace?: string
 }
 
-export type Exercise = StrengthExercise | CardioExercise
+export type Exercise = StrengthExercise & CardioExercise
 
 export type Workout = {
   id?: string
