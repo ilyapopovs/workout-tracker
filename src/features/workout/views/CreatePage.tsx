@@ -3,8 +3,9 @@ import { set } from '../../../helpers/formHelpers'
 import greenTrashIcon from '/images/trash-light-green.png'
 import { supabase } from '../../../supabaseClient'
 import { Exercise } from '../types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addWorkout } from '../store/workoutSlice'
+import type { User } from '@supabase/supabase-js'
 
 const CreatePage = () => {
   const [statusMessage, setStatusMessage] = useState('')
@@ -12,6 +13,7 @@ const CreatePage = () => {
   const [workoutName, setWorkoutName] = useState('')
   const [workoutType, setWorkoutType] = useState('')
   const [exercises, setExercises] = useState([] as Exercise[])
+  const user = useSelector((store: any) => store.auth.user) as User
   const dispatch = useDispatch()
 
   const createWorkout = async (e: FormEvent) => {
@@ -19,7 +21,7 @@ const CreatePage = () => {
 
     const response = await supabase
       .from('workouts')
-      .insert([{ workoutName, workoutType, exercises }])
+      .insert([{ workoutName, workoutType, exercises, user_id: user.id }])
 
     if (response.error) {
       setErrorMessage('Something went wrong!')
