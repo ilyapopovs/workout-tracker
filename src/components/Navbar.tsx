@@ -4,9 +4,8 @@ import dumbbellImg from '/images/dumbbell-light.png'
 import { setUser } from '../features/auth/store/authSlice'
 import { supabase } from '../supabaseClient'
 import { setWorkouts } from '../features/workout/store/workoutSlice'
-type Props = {}
 
-export default function Navbar({}: Props) {
+export default function Navbar() {
   const user = useSelector((store: any) => store.auth.user)
   const dispatch = useDispatch()
   const navigate = useNavigate()
